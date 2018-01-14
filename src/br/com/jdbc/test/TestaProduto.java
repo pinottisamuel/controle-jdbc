@@ -22,7 +22,7 @@ public class TestaProduto {
 			List<Produto> produtos = dao.lista();
 			
 			for (Produto produto : produtos) {
-				System.out.println(produto);
+				System.out.println("Produtos: " + produto);
 			}
 		}
 	}
