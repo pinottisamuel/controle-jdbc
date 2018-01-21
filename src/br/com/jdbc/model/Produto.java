@@ -4,11 +4,11 @@ import java.util.Calendar;
 
 public class Produto {
 
-	private Integer id;
-	private String observacao;
+	private Integer id;	
 	private String nome;
 	private double valor;
 	private Calendar dataCadastro;
+	private String observacao;
 	
 
 	public Produto(String nome, double valor, String observacao) {
@@ -17,6 +17,12 @@ public class Produto {
 		this.valor = valor;
 		this.observacao = observacao;
 	}
+
+	
+	public Integer getId() {
+		return id;
+	}
+
 
 	public String getObservacao() {
 		return observacao;

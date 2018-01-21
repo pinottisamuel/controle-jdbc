@@ -42,6 +42,7 @@ public class ProdutosDAO {
 	}
 
 	public List<Produto> lista() throws SQLException {
+		System.out.println("Entrou3");
 		String sql = "select * from produtos;";
 		List<Produto> produtos = new ArrayList<>();
 		
