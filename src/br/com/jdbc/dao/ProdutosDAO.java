@@ -1,5 +1,6 @@
 package br.com.jdbc.dao;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,7 +12,7 @@ import java.sql.Date;
 
 import com.mysql.jdbc.Statement;
 
-import br.com.jdbc.model.Produto;
+import br.com.jdbc.entities.Produto;
 
 public class ProdutosDAO {
 
@@ -27,7 +28,7 @@ public class ProdutosDAO {
 		
 		try(PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 			stmt.setString(1, produto.getNome());
-			stmt.setDouble(2, produto.getValor());
+			stmt.setBigDecimal(2, produto.getValor());
 			stmt.setDate(3, date);
 			stmt.setString(4, produto.getObservacao());
 			stmt.execute();
@@ -42,7 +43,6 @@ public class ProdutosDAO {
 	}
 
 	public List<Produto> lista() throws SQLException {
-		System.out.println("Entrou3");
 		String sql = "select * from produtos;";
 		List<Produto> produtos = new ArrayList<>();
 		
@@ -53,11 +53,15 @@ public class ProdutosDAO {
 				while(rs.next()) {
 					int id = rs.getInt("id");
 					String nome = rs.getString("nome_produto");
-					Double valor = rs.getDouble("valor");
+					BigDecimal valor = new BigDecimal(rs.getString("valor"));
 					String observacao = rs.getString("observacao");
+					
+					Calendar dtCadastro = Calendar.getInstance();
+					dtCadastro.setTime(rs.getDate("data_cadastro"));
 					
 					Produto produto = new Produto(nome, valor, observacao);
 					produto.setId(id);
+					produto.setDataCadastro(dtCadastro);
 					
 					produtos.add(produto);
 				}

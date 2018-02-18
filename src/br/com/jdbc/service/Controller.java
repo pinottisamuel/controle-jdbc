@@ -1,4 +1,4 @@
-package br.com.jdbc.web;
+package br.com.jdbc.service;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -10,24 +10,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(urlPatterns="/executa")
+@WebServlet(urlPatterns="/execute")
 public class Controller extends HttpServlet {
 	
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		String tarefa = req.getParameter("tarefa");
+		String action = req.getParameter("action");
 		
-		if(tarefa == null) {
+		if(action == null) {
 			throw new IllegalArgumentException("Informe a tarefa que deseja executar");
 		}
 		
-		tarefa = "br.com.jdbc.web." + tarefa;
+		action = "br.com.jdbc.service." + action;
 		
 		try {
-			Class<?> tipo = Class.forName(tarefa);
-			Tarefa instancia = (Tarefa) tipo.newInstance();
-			String page = instancia.executa(req, resp);
+			Class<?> tipo = Class.forName(action);
+			Execute instancia = (Execute) tipo.newInstance();
+			String page = instancia.execute(req, resp);
 			RequestDispatcher dispatcher = req.getRequestDispatcher(page);
 			dispatcher.forward(req, resp);
 			
