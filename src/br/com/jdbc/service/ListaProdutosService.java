@@ -16,15 +16,27 @@ public class ListaProdutosService implements Execute {
 	@Override
 	public String execute(HttpServletRequest req, HttpServletResponse resp) throws SQLException, ClassNotFoundException {
 		
-		String filtro = req.getParameter("filtro");
+		String filtro = req.getParameter("filtro");		
+		String page = null;
 		
 		if(filtro == null) {
 			try(Connection con = new ConnectionPool().getConnection()) {
 				List<Produto> produtos = new ProdutosDAO(con).lista();
 				req.setAttribute("produtos", produtos);
 			}
+			
+			page = "WEB-INF/jsp/lista-produtos.jsp";
+			
+		} else {
+			Integer codigo = Integer.parseInt(filtro);
+			try(Connection con = new ConnectionPool().getConnection()) {
+				List<Produto> produtos = new ProdutosDAO(con).lista(codigo);
+				req.setAttribute("produtos", produtos);
+			}
+			
+			page = "form-update-produto.jsp";
 		}
 		
-		return "WEB-INF/jsp/lista-produtos.jsp";
+		return page;
 	}
 }

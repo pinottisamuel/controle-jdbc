@@ -11,25 +11,25 @@ import br.com.jdbc.connection.ConnectionPool;
 import br.com.jdbc.dao.ProdutosDAO;
 import br.com.jdbc.entities.Produto;
 
-public class InsertProdutoService implements Execute {
+public class UpdateProdutoService implements Execute {
 
 	@Override
-	public String execute(HttpServletRequest req, HttpServletResponse resp)
-			throws SQLException, ClassNotFoundException {
+	public String execute(HttpServletRequest req, HttpServletResponse resp) throws SQLException, ClassNotFoundException {
 		
+		Integer id = Integer.parseInt(req.getParameter("id"));
 		String nome = req.getParameter("nome-produto");
 		String aux = req.getParameter("valor");
 		BigDecimal valor = new BigDecimal(aux.replaceAll(",", ""));
 		String observacao = req.getParameter("observacao");
 		
 		Produto produto = new Produto(nome, valor, observacao);
+		produto.setId(id);
 		
 		try(Connection con = new ConnectionPool().getConnection()){
 			ProdutosDAO dao = new ProdutosDAO(con);
-			dao.insert(produto);
+			dao.update(produto);
 		}
 		
 		return "execute?action=ListaProdutosService";
 	}	
 }
-

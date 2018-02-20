@@ -32,8 +32,8 @@
 					<td><fmt:formatDate value="${p.dataCadastro.time }"
 							pattern="dd/MM/yyyy" /></td>
 					<td>${p.observacao }</td>
-					<td><a href="jsp/form-produto.jsp">Alterar</a></td>
-					<td><a href="jsp/form-produto.jsp">Excluir</a></td>
+					<td><a href="execute?action=ListaProdutosService&filtro=${p.id }">Alterar</a></td>
+					<td><a href="form-produto.jsp">Excluir</a></td>
 				</tr>
 
 			</c:forEach>

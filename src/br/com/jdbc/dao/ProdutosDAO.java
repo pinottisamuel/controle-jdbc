@@ -70,4 +70,43 @@ public class ProdutosDAO {
 		
 		return produtos;
 	}
+
+	public List<Produto> lista(Integer codigo) throws SQLException {
+		String sql = "select * from produtos where id = ?;";
+		List<Produto> produtos = new ArrayList<>();
+		
+		try(PreparedStatement stmt = con.prepareStatement(sql)) {
+			stmt.setInt(1, codigo);
+			stmt.execute();
+			
+			try(ResultSet rs = stmt.getResultSet()) {
+				while(rs.next()) {
+					int id = rs.getInt("id");
+					String nome = rs.getString("nome_produto");
+					BigDecimal valor = new BigDecimal(rs.getString("valor"));
+					String observacao = rs.getString("observacao");
+					
+					Produto produto = new Produto(nome, valor, observacao);
+					produto.setId(id);
+					
+					produtos.add(produto);
+				}
+			}
+		}
+		
+		return produtos;
+	}
+
+	public void update(Produto produto) throws SQLException {
+		String sql = "update produtos set nome_produto = ?, valor = ?, observacao = ? where id = ?;";
+		
+		try(PreparedStatement stmt = con.prepareStatement(sql)) {
+			stmt.setString(1, produto.getNome());
+			stmt.setBigDecimal(2, produto.getValor());
+			stmt.setString(3, produto.getObservacao());
+			stmt.setInt(4, produto.getId());
+			
+			stmt.execute();
+		}
+	}
 }

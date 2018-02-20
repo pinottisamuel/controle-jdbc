@@ -15,7 +15,7 @@
 		<input type="hidden" name="action" value="ListaProdutosService" /> 
 		<input id="lista-produtos" type="submit" value="Listar Produtos" />
 		
-		<a id="cadastro-produtos" href="form-produto.jsp">Cadastrar Produtos</a>
+		<a id="cadastro-produtos" href="form-insert-produto.jsp">Cadastrar Produtos</a>
 		
 	</form>
 </body>
