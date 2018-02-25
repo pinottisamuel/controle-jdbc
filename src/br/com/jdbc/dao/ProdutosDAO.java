@@ -109,4 +109,14 @@ public class ProdutosDAO {
 			stmt.execute();
 		}
 	}
+
+	public void delete(Integer codigo) throws SQLException {
+		String sql = "delete from produtos where id = ?;";
+		
+		try(PreparedStatement stmt = con.prepareStatement(sql)) {
+			stmt.setInt(1, codigo);
+			
+			stmt.execute();
+		}
+	}
 }

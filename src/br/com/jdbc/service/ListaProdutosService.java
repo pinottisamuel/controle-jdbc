@@ -3,7 +3,6 @@ package br.com.jdbc.service;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,10 +15,11 @@ public class ListaProdutosService implements Execute {
 	@Override
 	public String execute(HttpServletRequest req, HttpServletResponse resp) throws SQLException, ClassNotFoundException {
 		
-		String filtro = req.getParameter("filtro");		
+		String filtro = req.getParameter("filtro");	
+		String acao = req.getParameter("acao");
 		String page = null;
 		
-		if(filtro == null) {
+		if(filtro == null || acao != null) {
 			try(Connection con = new ConnectionPool().getConnection()) {
 				List<Produto> produtos = new ProdutosDAO(con).lista();
 				req.setAttribute("produtos", produtos);
