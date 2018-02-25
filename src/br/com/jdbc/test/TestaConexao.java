@@ -9,7 +9,7 @@ public class TestaConexao {
 	
 	public static void main(String[] args) throws SQLException {
 		
-		try(Connection con = new ConnectionPool().getConnectioin()){
+		try(Connection con = new ConnectionPool().getConnection()){
 			System.out.println("Conectado");
 		}
 	}

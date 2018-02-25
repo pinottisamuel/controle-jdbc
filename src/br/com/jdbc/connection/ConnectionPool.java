@@ -21,7 +21,7 @@ public class ConnectionPool {
 		this.dataSource = pool;
 	}
 	
-	public Connection getConnectioin() throws SQLException {
+	public Connection getConnection() throws SQLException {
 		Connection connection = dataSource.getConnection();
 		return connection;
 	}

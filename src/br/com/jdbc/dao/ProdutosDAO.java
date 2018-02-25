@@ -1,5 +1,6 @@
 package br.com.jdbc.dao;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,7 +12,7 @@ import java.sql.Date;
 
 import com.mysql.jdbc.Statement;
 
-import br.com.jdbc.model.Produto;
+import br.com.jdbc.entities.Produto;
 
 public class ProdutosDAO {
 
@@ -27,7 +28,7 @@ public class ProdutosDAO {
 		
 		try(PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 			stmt.setString(1, produto.getNome());
-			stmt.setDouble(2, produto.getValor());
+			stmt.setBigDecimal(2, produto.getValor());
 			stmt.setDate(3, date);
 			stmt.setString(4, produto.getObservacao());
 			stmt.execute();
@@ -52,7 +53,37 @@ public class ProdutosDAO {
 				while(rs.next()) {
 					int id = rs.getInt("id");
 					String nome = rs.getString("nome_produto");
-					Double valor = rs.getDouble("valor");
+					BigDecimal valor = new BigDecimal(rs.getString("valor"));
+					String observacao = rs.getString("observacao");
+					
+					Calendar dtCadastro = Calendar.getInstance();
+					dtCadastro.setTime(rs.getDate("data_cadastro"));
+					
+					Produto produto = new Produto(nome, valor, observacao);
+					produto.setId(id);
+					produto.setDataCadastro(dtCadastro);
+					
+					produtos.add(produto);
+				}
+			}
+		}
+		
+		return produtos;
+	}
+
+	public List<Produto> lista(Integer codigo) throws SQLException {
+		String sql = "select * from produtos where id = ?;";
+		List<Produto> produtos = new ArrayList<>();
+		
+		try(PreparedStatement stmt = con.prepareStatement(sql)) {
+			stmt.setInt(1, codigo);
+			stmt.execute();
+			
+			try(ResultSet rs = stmt.getResultSet()) {
+				while(rs.next()) {
+					int id = rs.getInt("id");
+					String nome = rs.getString("nome_produto");
+					BigDecimal valor = new BigDecimal(rs.getString("valor"));
 					String observacao = rs.getString("observacao");
 					
 					Produto produto = new Produto(nome, valor, observacao);
@@ -64,5 +95,28 @@ public class ProdutosDAO {
 		}
 		
 		return produtos;
+	}
+
+	public void update(Produto produto) throws SQLException {
+		String sql = "update produtos set nome_produto = ?, valor = ?, observacao = ? where id = ?;";
+		
+		try(PreparedStatement stmt = con.prepareStatement(sql)) {
+			stmt.setString(1, produto.getNome());
+			stmt.setBigDecimal(2, produto.getValor());
+			stmt.setString(3, produto.getObservacao());
+			stmt.setInt(4, produto.getId());
+			
+			stmt.execute();
+		}
+	}
+
+	public void delete(Integer codigo) throws SQLException {
+		String sql = "delete from produtos where id = ?;";
+		
+		try(PreparedStatement stmt = con.prepareStatement(sql)) {
+			stmt.setInt(1, codigo);
+			
+			stmt.execute();
+		}
 	}
 }
